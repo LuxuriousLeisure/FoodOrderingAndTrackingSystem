@@ -1,0 +1,45 @@
+<section id="page-payment" class="page">
+  <div class="card">
+    <h2>Payment</h2>
+    <div class="form">
+      <label>Method
+        <select id="payMethod">
+          <option value="card">Card</option>
+          <option value="wallet">Wallet</option>
+          <option value="cash">Cash on delivery</option>
+        </select>
+      </label>
+      <label>Note<textarea rows="3" id="orderNote" placeholder="Allergies, preferences..."></textarea></label>
+      <button class="btn primary" id="btnPay">Pay</button>
+      <div class="muted" id="payStatus"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// 支付页面逻辑
+document.addEventListener('DOMContentLoaded', () => {
+  const payBtn = document.getElementById('btnPay');
+  const payStatus = document.getElementById('payStatus');
+
+  // 模拟支付处理
+  payBtn.addEventListener('click', () => {
+    payStatus.textContent = 'Processing payment...';
+    
+    // 模拟支付延迟
+    setTimeout(() => {
+      payStatus.textContent = 'Payment successful! Creating order...';
+      
+      // 通知员工端创建订单（实际项目中应通过API）
+      if (window.createStaffOrder) {
+        window.createStaffOrder();
+      }
+
+      // 跳转到跟踪页面
+      setTimeout(() => {
+        location.hash = 'tracking';
+      }, 800);
+    }, 1000);
+  });
+});
+</script>
