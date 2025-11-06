@@ -14,25 +14,47 @@ exports.getAllRestaurants = async (req, res) => {
 };
 
 // 显示餐厅详情
-exports.getRestaurantById = async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findById(req.params.id);
-    if (!restaurant) return res.redirect('/');
+// exports.getRestaurantById = async (req, res) => {
+//   try {
+//     const restaurant = await Restaurant.findById(req.params.id);
+//     if (!restaurant) return res.redirect('/');
 
-    const dishes = await Restaurant.getDishes(req.params.id);
-    const comments = await Restaurant.getComments(req.params.id);
+//     const dishes = await Restaurant.getDishes(req.params.id);
+//     const comments = await Restaurant.getComments(req.params.id);
 
-    res.render('restaurant', {
-      user: req.session.user,
-      restaurant,
-      dishes,
-      comments,
-      cart: req.session.cart || []
-    });
-  } catch (err) {
-    res.status(500).send('Error loading restaurant');
-  }
-};
+//     res.render('restaurant', {
+//       user: req.session.user,
+//       restaurant,
+//       dishes,
+//       comments,
+//       cart: req.session.cart || []
+//     });
+//   } catch (err) {
+//     res.status(500).send('Error loading restaurant');
+//   }
+// };
+// 修改后代码
+  exports.getRestaurantById = async (req, res) => {
+    try {
+      const restaurant = await Restaurant.findById(req.params.id);
+      if (!restaurant) return res.redirect('/');
+
+      // 关键：将ObjectId类型的餐厅ID转成字符串
+      const restaurantIdStr = req.params.id.toString(); 
+      const dishes = await Restaurant.getDishes(restaurantIdStr); // 传入字符串ID
+      const comments = await Restaurant.getComments(restaurantIdStr); // 评论查询也同步修改（可选）
+
+      res.render('restaurant', {
+        user: req.session.user,
+        restaurant,
+        dishes, // 此时能查询到匹配的菜品
+        comments,
+        cart: req.session.cart || []
+      });
+    } catch (err) {
+      res.status(500).send('Error loading restaurant');
+    }
+  };
 
 // 添加评论
 exports.addComment = async (req, res) => {
