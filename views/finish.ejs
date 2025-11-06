@@ -1,0 +1,51 @@
+<section id="page-finish" class="page">
+  <div class="finish-wrap">
+    <div class="card finish-card">
+      <h2>Delivery Finished</h2>
+      <p class="muted" id="finishSummary">Order has been delivered successfully.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn primary" id="finishGoStaff">Go to Staff Console</button>
+        <button class="btn ghost" id="finishGoHome">Go to Home</button>
+      </div>
+      <div class="muted" id="finishAutoNote" style="margin-top:6px"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// 完成页面逻辑
+document.addEventListener('DOMContentLoaded', () => {
+  let finishTimer = null;
+  const role = window.role || 'user'; // 从全局获取角色信息
+
+  function showFinishPage({ auto = false, summary } = {}) {
+    document.getElementById('finishSummary').textContent = summary || 'Order has been delivered successfully.';
+    
+    const dest = role === 'staff' ? 'staff' : 'home';
+    const seconds = 2;
+    document.getElementById('finishAutoNote').textContent = 
+      `Redirecting to ${dest === 'staff' ? 'Staff Console' : 'Home'} in ${seconds}s...`;
+
+    if (finishTimer) clearTimeout(finishTimer);
+    finishTimer = setTimeout(() => {
+      location.hash = dest;
+    }, seconds * 1000);
+  }
+
+  // 绑定按钮事件
+  document.getElementById('finishGoStaff').addEventListener('click', () => {
+    if (finishTimer) clearTimeout(finishTimer);
+    location.hash = 'staff';
+  });
+
+  document.getElementById('finishGoHome').addEventListener('click', () => {
+    if (finishTimer) clearTimeout(finishTimer);
+    location.hash = 'home';
+  });
+
+  // 页面显示时初始化
+  if (document.getElementById('page-finish').classList.contains('active')) {
+    showFinishPage();
+  }
+});
+</script>
