@@ -23,22 +23,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const payStatus = document.getElementById('payStatus');
 
   // 模拟支付处理
-  payBtn.addEventListener('click', () => {
+  payBtn.addEventListener('click', async () => {
     payStatus.textContent = 'Processing payment...';
     
     // 模拟支付延迟
-    setTimeout(() => {
+    setTimeout(async () => {
       payStatus.textContent = 'Payment successful! Creating order...';
       
-      // 通知员工端创建订单（实际项目中应通过API）
-      if (window.createStaffOrder) {
-        window.createStaffOrder();
-      }
+      try {
+        // 新增：向后端提交订单
+        const response = await fetch('/order/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            payMethod: document.getElementById('payMethod').value,
+            orderNote: document.getElementById('orderNote').value
+          })
+        });
 
-      // 跳转到跟踪页面
-      setTimeout(() => {
-        location.hash = 'tracking';
-      }, 800);
+        if (response.ok) {
+          // 通知员工端创建订单
+          if (window.createStaffOrder) {
+            window.createStaffOrder();
+          }
+          // 跳转到跟踪页面
+          setTimeout(() => {
+            location.hash = 'tracking';
+          }, 800);
+        } else {
+          throw new Error('Order creation failed');
+        }
+      } catch (err) {
+        payStatus.textContent = 'Error creating order. Please try again.';
+        console.error(err);
+      }
     }, 1000);
   });
 });
