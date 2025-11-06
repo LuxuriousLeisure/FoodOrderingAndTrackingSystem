@@ -1,0 +1,66 @@
+<section id="page-rating" class="page">
+  <div class="card">
+    <h2>Rating & Feedback</h2>
+    <div class="stars" id="stars">
+      <span class="s">⭐</span>
+      <span class="s">⭐</span>
+      <span class="s">⭐</span>
+      <span class="s">⭐</span>
+      <span class="s">⭐</span>
+    </div>
+    <div class="form" style="margin-top:10px">
+      <label>Comment<textarea id="fbText" rows="3" placeholder="How was it?"></textarea></label>
+      <button class="btn primary" id="sendFeedback">Submit</button>
+      <div class="muted" id="fbStatus"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// 评分页面逻辑
+document.addEventListener('DOMContentLoaded', () => {
+  const stars = document.getElementById('stars');
+  const sendBtn = document.getElementById('sendFeedback');
+  const fbStatus = document.getElementById('fbStatus');
+  let starValue = 0;
+
+  // 更新星级显示
+  function updateStars(count) {
+    [...stars.children].forEach((star, index) => {
+      star.classList.toggle('on', index < count);
+    });
+  }
+
+  // 星级鼠标悬停效果
+  stars.addEventListener('mousemove', (e) => {
+    if (!e.target.classList.contains('s')) return;
+    const index = [...stars.children].indexOf(e.target) + 1;
+    updateStars(index);
+  });
+
+  // 鼠标离开时恢复选中状态
+  stars.addEventListener('mouseleave', () => {
+    updateStars(starValue);
+  });
+
+  // 点击选择星级
+  stars.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('s')) return;
+    starValue = [...stars.children].indexOf(e.target) + 1;
+    updateStars(starValue);
+  });
+
+  // 提交反馈
+  sendBtn.addEventListener('click', () => {
+    if (starValue === 0) {
+      alert('Please rate your experience first');
+      return;
+    }
+
+    fbStatus.textContent = 'Thanks for your feedback!';
+    setTimeout(() => {
+      location.hash = 'home';
+    }, 1000);
+  });
+});
+</script>

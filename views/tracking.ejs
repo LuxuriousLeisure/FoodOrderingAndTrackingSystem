@@ -1,0 +1,144 @@
+<section id="page-tracking" class="page">
+  <div class="card">
+    <h2>Real-time Tracking</h2>
+    <canvas id="map" class="map" width="1000" height="420"></canvas>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <button class="btn ghost" id="trackPause">Pause</button>
+      <button class="btn ghost" id="trackResume">Resume</button>
+      <button class="btn primary" id="btnDelivered">Delivered</button>
+    </div>
+    <div class="muted" id="trackInfo"></div>
+  </div>
+</section>
+
+<script>
+// 订单跟踪逻辑
+document.addEventListener('DOMContentLoaded', () => {
+  const mapCanvas = document.getElementById('map');
+  const ctx = mapCanvas.getContext('2d');
+  const trackInfo = document.getElementById('trackInfo');
+  const pauseBtn = document.getElementById('trackPause');
+  const resumeBtn = document.getElementById('trackResume');
+  const deliveredBtn = document.getElementById('btnDelivered');
+
+  let path = [];
+  let progress = 0;
+  let isRunning = true;
+  let animationId = null;
+
+  // 初始化配送路径
+  function initPath() {
+    const width = mapCanvas.width;
+    const height = mapCanvas.height;
+    path = [
+      { x: 40, y: height - 60 },        // 餐厅位置
+      { x: width * 0.35, y: height * 0.7 },  // 中间点1
+      { x: width * 0.55, y: height * 0.5 },  // 中间点2
+      { x: width * 0.75, y: height * 0.35 }, // 中间点3
+      { x: width - 60, y: 80 }          // 目的地
+    ];
+    progress = 0;
+    isRunning = true;
+    drawMap();
+  }
+
+  // 绘制地图基础元素
+  function drawMap() {
+    // 背景
+    ctx.fillStyle = '#eef2ff';
+    ctx.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
+
+    // 路径线
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 8;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(path[0].x, path[0].y);
+    path.forEach(point => ctx.lineTo(point.x, point.y));
+    ctx.stroke();
+
+    // 起点（餐厅）
+    ctx.fillStyle = '#10b981';
+    ctx.beginPath();
+    ctx.arc(path[0].x, path[0].y, 10, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 终点（用户）
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    ctx.arc(path[path.length - 1].x, path[path.length - 1].y, 10, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // 线性插值计算
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  // 动画骑手移动
+  function animateRider() {
+    if (!isRunning) {
+      animationId = requestAnimationFrame(animateRider);
+      return;
+    }
+
+    drawMap();
+
+    // 计算当前位置
+    const segment = Math.floor(progress);
+    const t = progress - segment;
+    const start = path[segment];
+    const end = path[Math.min(segment + 1, path.length - 1)];
+    const currentX = lerp(start.x, end.x, t);
+    const currentY = lerp(start.y, end.y, t);
+
+    // 绘制骑手
+    ctx.fillStyle = '#111827';
+    ctx.beginPath();
+    ctx.arc(currentX, currentY, 12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = '900 14px system-ui';
+    ctx.fillText('Rider', currentX - 16, currentY - 16);
+
+    // 更新进度
+    progress += 0.012;
+    if (progress >= path.length - 1) {
+      isRunning = false;
+      trackInfo.textContent = 'Delivery arrived!';
+    }
+
+    animationId = requestAnimationFrame(animateRider);
+  }
+
+  // 绑定控制按钮事件
+  pauseBtn.addEventListener('click', () => {
+    isRunning = false;
+    trackInfo.textContent = 'Tracking paused';
+  });
+
+  resumeBtn.addEventListener('click', () => {
+    isRunning = true;
+    trackInfo.textContent = 'Tracking resumed';
+  });
+
+  deliveredBtn.addEventListener('click', () => {
+    isRunning = false;
+    // 根据角色跳转不同页面
+    if (window.role === 'staff') {
+      location.hash = 'finish';
+    } else {
+      location.hash = 'rating';
+    }
+  });
+
+  // 初始化
+  initPath();
+  animationId = requestAnimationFrame(animateRider);
+
+  // 页面离开时清理动画
+  window.addEventListener('hashchange', () => {
+    cancelAnimationFrame(animationId);
+  });
+});
+</script>
