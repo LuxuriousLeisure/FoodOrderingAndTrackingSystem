@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-// 替换为你的数据库密码
+// change to your own query string
 const uri = 'mongodb+srv://wuyou007991:007991@cluster0.ashcnqc.mongodb.net/?appName=Cluster0';
 const client = new MongoClient(uri);
 
@@ -21,5 +21,6 @@ async function connectDB() {
 function getDB() {
   return db;
 }
+
 
 module.exports = { connectDB, getDB };
