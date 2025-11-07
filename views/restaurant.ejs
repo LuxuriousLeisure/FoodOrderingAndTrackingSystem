@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= restaurant.name %> - Food Ordering</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/Project.css">
 </head>
 <body>
   <header>
     <div class="wrap topbar">
       <a class="brand" href="/">
-        <div class="brand-badge">FS</div>
+        <img src="/css/Logo.png" width='80' height='60'>
         <strong>Food Ordering System</strong>
       </a>
       <div style="display:flex;gap:8px">
@@ -18,18 +18,18 @@
         <% if (user) { %>
           <a class="pill" href="/logout">Logout</a>
         <% } else { %>
-          <a class="pill filled" href="/login?as=user">Login</a>
+          <a class="pill" href="/login?as=user">Login</a>
         <% } %>
       </div>
     </div>
   </header>
 
-  <main class="wrap page">
+  <main class="wrap page active">
     <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
       <a class="back-pill" href="/">← Back</a>
       <h2 id="restTitle"><%= restaurant.name %></h2>
     </div>
-    <p class="muted"><%= restaurant.desc %> • <%= restaurant.cuisine %> • ETA <%= restaurant.eta %></p>
+    <p class="brand-dark"><%= restaurant.desc %> • <%= restaurant.cuisine %> • ETA <%= restaurant.eta %></p>
 
     <div class="layout">
       <div>
@@ -121,6 +121,7 @@
             $<%= cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2) %>
           </span>
         </div>
+
         <a href="/checkout" class="checkout">Checkout</a>
       </aside>
     </div>
