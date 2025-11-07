@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Food Ordering System</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/Project.css">
 </head>
 <body>
   <header>
     <div class="wrap topbar">
       <a class="brand" href="/">
-        <div class="brand-badge">FS</div>
+        <img src="/css/Logo.png" width='80' height='60'>
         <strong>Food Ordering System</strong>
       </a>
       <div style="display:flex;gap:8px">
@@ -20,7 +20,7 @@
         <% if (user) { %>
           <a class="pill" href="/logout">Logout</a>
         <% } else { %>
-          <a class="pill filled" href="/login?as=user">User</a>
+          <a class="pill" href="/login?as=user">User</a>
           <a class="pill" href="/login?as=staff">Staff</a>
         <% } %>
       </div>
