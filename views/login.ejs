@@ -1,4 +1,23 @@
-<section id="page-login" class="page">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="/css/Project.css">
+</head>
+<body>
+ <header>
+    <div class="wrap topbar">
+      <a class="brand" href="/">
+        <img src="/css/Logo.png" width='80' height='60'>
+        <strong>Food Ordering System</strong>
+      </a>
+      <div style="display:flex;gap:8px">
+
+          <a class="pill" href="/login?as=user">User</a>
+          <a class="pill" href="/login?as=staff">Staff</a>
+      </div>
+    </div>
+  </header>
+<section id="page-login" class="page active">
   <div class="login-shell">
     <a class="back-pill" href="/" data-route="home">← Back</a>
     <div class="stack">
@@ -33,6 +52,8 @@
     </div>
   </div>
 </section>
+</body>
+
 
 <script>
 // 登录页面逻辑
