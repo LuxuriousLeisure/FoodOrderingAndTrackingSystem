@@ -13,13 +13,17 @@
   <section id="page-payment" class="page active">
   	  <div class="card">
   	  	<h2>Checkout</h2>
+  	  	<div class="form">
 		  <p>Total: $<%= total.toFixed(2) %></p>
-		  <div id="cart-items">
-		    <% cart.forEach(item => { %>
-		      <p><%= item.name %> x <%= item.quantity %> = $<%= (item.price * item.quantity).toFixed(2) %><p>
-		    <% }) %>
-		  </div>
-		  <button class="btn primary" id="checkout-button">Pay</button>
+		    <div id="cart-items">
+		      <% cart.forEach(item => { %>
+			<p><%= item.name %> x <%= item.quantity %> = $<%= (item.price*item.quantity).toFixed(2) %><p>
+			    <% }) %>
+		            <label>Note<textarea rows="3" id="orderNote" placeholder="Allergies, preferences..."></textarea></label>
+	            </div>
+	         </div>
+	         <button class="btn primary" id="checkout-button">Pay</button>
+	         
   	  </div>
 	  
   </section>
