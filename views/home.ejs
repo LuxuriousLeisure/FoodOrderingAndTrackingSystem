@@ -86,10 +86,11 @@
 
   <script>
     // 轮播图逻辑
-    const track = document.getElementById('carouselTrack');
+ const track = document.getElementById('carouselTrack');
     const slides = track.children;
     const dotsWrap = document.getElementById('carouselDots');
     let index = 0;
+    let AutoTimer=null;
 
     function setIndex(i) {
       index = (i + slides.length) % slides.length;
@@ -106,10 +107,32 @@
         dotsWrap.appendChild(dot);
       });
     }
+    
+    function startAuto(){
+	
+    	  AutoTimer=setInterval(()=>setIndex(index+1), 3000); 
+	
+    };
+    function stopAuto(AutoTimer){
+    	if(AutoTimer){
+	    	clearInterval(AutoTimer); 
+	    	AutoTimer=null;
+	}
+    };
 
-    document.getElementById('nextBtn').onclick = () => setIndex(index + 1);
-    document.getElementById('prevBtn').onclick = () => setIndex(index - 1);
+    document.getElementById('nextBtn').onclick = () => {
+    	stopAuto(AutoTimer);
+    	setIndex(index + 1);
+    	startAuto();
+    };
+    document.getElementById('prevBtn').onclick = () => {
+    	stopAuto(AutoTimer);
+    	setIndex(index - 1);
+    	startAuto();
+    };
     updateDots();
+    startAuto();
+
 
     // 画布渲染
     document.querySelectorAll('.visual canvas').forEach(canvas => {
