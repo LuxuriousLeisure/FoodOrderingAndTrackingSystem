@@ -69,22 +69,22 @@ strong{
 	border-radius: 999px;
 	font-weight: 700;
 	text-decoration: none;
-	border: 1px solid var(--brand);
-	color: var(--brand);
-	background: #fff;
+	background: var(--brand);
+	color: #fff;
 	transition: background .15s, color .15s, border-color .15s;
 }
 
-.pill.filled {
-	background: var(--brand);
-	color: #fff;
+.pill:hover {
+	background: var(--brand-dark);
+	color: #800000;
+	border: 1px solid var(--brand);
 }
 
 .page {
 	display: none;
 }
 
-.active {
+.page.active {
 	display: block;
 }
 
@@ -232,7 +232,7 @@ strong{
 .btn.primary {
 	background: var(--brand);
 	color: #fff;
-	outline:2px solid #000000;
+	outline:2px,#000000;
 	outline-style:solid;
 }
 
@@ -348,7 +348,6 @@ strong{
 	color: #fff;
 	font-weight: 800;
 	cursor: pointer;
-
 }
 
 .checkout:hover{
@@ -356,6 +355,7 @@ strong{
 	background:var(--brand-dark);
 	color:var(--accent);
 }
+
 .login-shell {
 	border: 1px solid var(--line);
 	border-radius: 16px;
@@ -510,6 +510,19 @@ strong{
 		box-shadow:5px 5px 3px 3px;
 }
 
+#successPage{
+	height:100vh;
+	width:100vw;
+	background:#e0e0e0;
+	display:flex;
+	justify-content:Center;
+	
+}
+#yeah{
+	height:100vh;
+	width:100vw;
+}
+
 footer{
 	
 	color:#fffdf9;
@@ -523,5 +536,3 @@ footer{
     .cart{position:relative;top:auto}
     .login-shell{grid-template-columns:1fr}
   }
-  
-
