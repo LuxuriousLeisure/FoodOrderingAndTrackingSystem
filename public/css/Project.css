@@ -69,22 +69,22 @@ strong{
 	border-radius: 999px;
 	font-weight: 700;
 	text-decoration: none;
-	background: var(--brand);
-	color: #fff;
+	border: 1px solid var(--brand);
+	color: var(--brand);
+	background: #fff;
 	transition: background .15s, color .15s, border-color .15s;
 }
 
-.pill:hover {
-	background: var(--brand-dark);
-	color: #800000;
-	border: 1px solid var(--brand);
+.pill.filled {
+	background: var(--brand);
+	color: #fff;
 }
 
 .page {
 	display: none;
 }
 
-.page.active {
+.active {
 	display: block;
 }
 
@@ -232,7 +232,7 @@ strong{
 .btn.primary {
 	background: var(--brand);
 	color: #fff;
-	outline:2px,#000000;
+	outline:2px solid #000000;
 	outline-style:solid;
 }
 
@@ -348,6 +348,7 @@ strong{
 	color: #fff;
 	font-weight: 800;
 	cursor: pointer;
+
 }
 
 .checkout:hover{
@@ -355,7 +356,6 @@ strong{
 	background:var(--brand-dark);
 	color:var(--accent);
 }
-
 .login-shell {
 	border: 1px solid var(--line);
 	border-radius: 16px;
@@ -523,3 +523,5 @@ footer{
     .cart{position:relative;top:auto}
     .login-shell{grid-template-columns:1fr}
   }
+  
+
