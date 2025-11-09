@@ -339,7 +339,7 @@ strong{
 }
 
 .checkout {
-	width: 100%;
+	width:100%;
 	margin-top: 10px;
 	padding: 12px;
 	border: none;
@@ -409,6 +409,9 @@ strong{
 	box-shadow: 0 6px 0 #9aa0f6;
 }
 
+.cta:hover{
+	box-shadow:3px 3px;
+}
 .form {
 	display: grid;
 	gap: 10px;
