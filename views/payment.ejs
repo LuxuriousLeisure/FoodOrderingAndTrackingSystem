@@ -2,18 +2,29 @@
 <html>
 <head>
   <title>Checkout</title>
-  <script src="https://js.stripe.com/v3/"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/Project.css"/>
+
+
 </head>
 <body>
-  <h1>Checkout</h1>
-  <p>Total: $<%= total.toFixed(2) %></p>
-  <div id="cart-items">
-    <% cart.forEach(item => { %>
-      <p><%= item.name %> x <%= item.quantity %> = $<%= (item.price * item.quantity).toFixed(2) %></p>
-    <% }) %>
-  </div>
-  <button id="checkout-button">Pay with Stripe</button>
-
+  <main class="wrap">
+  <section id="page-payment" class="page active">
+  	  <div class="card">
+  	  	<h2>Checkout</h2>
+		  <p>Total: $<%= total.toFixed(2) %></p>
+		  <div id="cart-items">
+		    <% cart.forEach(item => { %>
+		      <p><%= item.name %> x <%= item.quantity %> = $<%= (item.price * item.quantity).toFixed(2) %><p>
+		    <% }) %>
+		  </div>
+		  <button class="btn primary" id="checkout-button">Pay</button>
+  	  </div>
+	  
+  </section>
+  
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
     const stripe = Stripe('<%= stripePublishableKey %>');
     const checkoutButton = document.getElementById('checkout-button');
@@ -28,5 +39,6 @@
       .catch(err => alert('Error: ' + err));
     });
   </script>
+  </main>
 </body>
 </html>
