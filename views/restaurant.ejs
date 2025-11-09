@@ -122,9 +122,20 @@
           </span>
         </div>
         <br>
-        <a href="/checkout" class="checkout">Checkout</a>
+        
+        <button class="checkout" id="checkoutBtn">Checkout</button>
       </aside>
     </div>
   </main>
+  <script>
+ 
+  	const checkoutB = document.getElementById("checkoutBtn");
+  	checkoutB.addEventListener('click',()=>{
+  		
+  			window.location.href = '/checkout';
+  		
+  		
+  	})
+  </script>
 </body>
 </html>
