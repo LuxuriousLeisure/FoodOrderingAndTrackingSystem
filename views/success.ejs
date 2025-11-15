@@ -6,9 +6,69 @@
   <link rel="stylesheet" href="/css/Project.css">
 </head>
 <body>
-	<div id="successPage">
-		<img id="yeah" src="/css/SuccessPage.png" >
-	</div>
+<main class="wrap">
+	<section id="page-tracking" class="page active">
+	  <div class="card">
+	    <h2>Real-time Tracking</h2>
+	    <div id="successPage" class="map" ></div>
+	    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+	      <button class="btn ghost" id="trackPause">Pause</button>
+	      <button class="btn ghost" id="trackResume">Resume</button>
+	      <button class="btn primary" id="btnDelivered">Delivered</button>
+	    </div>
+	    <div class="muted" id="trackInfo"></div>
+	  </div>
+	</section>
+</main>
+<script>
+// 订单跟踪逻辑
+document.addEventListener('DOMContentLoaded', () => {
+  const mapCanvas = document.getElementById('successPage');
+  const trackInfo = document.getElementById('trackInfo');
+  const pauseBtn = document.getElementById('trackPause');
+  const resumeBtn = document.getElementById('trackResume');
+  const deliveredBtn = document.getElementById('btnDelivered');
+
+  let path = [];
+  let progress = 0;
+  let isRunning = true;
+  let animationId = null;
+
+  imgElement = document.createElement("img");
+  imgElement.src="/css/SuccessPage.png";
+  imgElement.width=900;
+  imgElement.height=450;
+  mapCanvas.appendChild(imgElement);
+ 
+  // 绑定控制按钮事件
+  pauseBtn.addEventListener('click', () => {
+    isRunning = false;
+    trackInfo.textContent = 'Tracking paused';
+  });
+
+  resumeBtn.addEventListener('click', () => {
+    isRunning = true;
+    trackInfo.textContent = 'Tracking resumed';
+  });
+
+  deliveredBtn.addEventListener('click', () => {
+    isRunning = false;
+    // 根据角色跳转不同页面
+    if (window.role === 'staff') {
+      location.hash = 'finish';
+    } else {
+      location.hash = 'rating';
+    }
+  });
+
+  
+
+  // 页面离开时清理动画
+  window.addEventListener('hashchange', () => {
+    cancelAnimationFrame(animationId);
+  });
+});
+</script>
 </body>
 
 </html>
