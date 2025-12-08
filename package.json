@@ -4,7 +4,11 @@
   "description": "MVC + MongoDB Food Ordering System",
   "main": "app.js",
   "scripts": {
+    "login": "./stripe_1.32.0_linux_x86_64/stripe login",
+    "webhook": "./stripe_1.32.0_linux_x86_64/stripe listen --forward-to localhost:8099/webhook",
     "start": "node app.js"
+    
+    
   },
   "dependencies": {
     "body-parser": "^1.20.1",
