@@ -116,13 +116,16 @@ exports.stripeWebhook = async (req, res) => {
     console.log(`Webhook signature verification failed.`, err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
-
+  console.log("testing");
   if (event.type === 'checkout.session.completed') {
+    try{
     const session = event.data.object;
-
+    console.log("function running");
     // Retrieve cart from session or DB if needed
     // Here we rely on metadata and recreate from line_items
-    const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+    const lineItems = await stripe.checkout.sessions.listLineItems(session.id,{
+      expand: ['data.price.product']
+    });
 
     const items = lineItems.data.map(item => ({
       _id: item.price.product.metadata.dishId,
@@ -145,8 +148,13 @@ exports.stripeWebhook = async (req, res) => {
 
     console.log(`Payment succeeded for session ${session.id}`);
   }
-
+	catch(err){
+	console.error('Error processing webhook:', err);
+  }
   res.json({ received: true });
+  
+  
+  }
 };
 
 // Success page
@@ -217,5 +225,4 @@ exports.getFinish = (req, res) => {
   if (!req.session.user) return res.redirect('/login?as=user');
   res.render('finish', { user: req.session.user, role: req.session.user.role });
 };
-
 
