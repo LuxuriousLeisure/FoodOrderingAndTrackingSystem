@@ -42,7 +42,7 @@ app.post('/create-checkout-session', orderController.createCheckoutSession);
 app.get('/checkout/success', orderController.checkoutSuccess);
 app.get('/checkout/cancel', orderController.checkoutCancel);
 
-app.get('/tracking', orderController.getTracking);
+app.get('/tracking/:orderId', orderController.getTracking);
 app.get('/rating', orderController.getRating);
 app.get('/finish', orderController.getFinish);
 

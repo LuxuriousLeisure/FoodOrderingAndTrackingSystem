@@ -2,6 +2,9 @@
 const Restaurant = require('../model/restaurant');
 const Order = require('../model/order');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const Driver = require('../model/driver');
+const User = require('../model/user');
+const Restaurant = require('../model/restaurant');
 
 exports.addToCart = async (req, res) => {
   if (!req.session.user) {
@@ -169,9 +172,40 @@ exports.checkoutCancel = (req, res) => {
   res.render('cancel', { user: req.session.user });
 };
 
-exports.getTracking = (req, res) => {
-  if (!req.session.user) return res.redirect('/login?as=user');
-  res.render('tracking', { user: req.session.user });
+// Track order
+exports.getTracking = async (req, res) => {
+    if (!req.session.user) return res.redirect('/login?as=user');
+
+    try {
+        const orderId = req.params.orderId;
+
+        const order = await Order.findById(orderId).lean();
+        if (!order) return res.status(404).send("Order not found");
+
+        const driver = await Driver.findById(order.driverId).lean();
+        const restaurant = await Restaurant.findById(order.restaurantId).lean();
+        const user = await User.findById(order.userId).lean();
+
+        // DEMO: move driver slightly each refresh
+        const newLat = driver.location.lat + (Math.random() * 0.002 - 0.001);
+        const newLng = driver.location.lng + (Math.random() * 0.002 - 0.001);
+
+        await Driver.findByIdAndUpdate(order.driverId, {
+            location: { lat: newLat, lng: newLng }
+        });
+
+        res.render("track", {
+            user: req.session.user,
+            order,
+            restaurant: restaurant.location,
+            userLoc: user.location,
+            driver: { lat: newLat, lng: newLng }
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error loading tracking page");
+    }
 };
 
 exports.getRating = (req, res) => {

@@ -1,6 +1,15 @@
 const { getDB } = require('./db');
 const { ObjectId } = require('mongodb');
 
+/* need to add location to each restaurant
+  e.g. each restaurant now includes the attribute "location"
+  location has the latitude and longtitude
+  {
+    "_id": "...",
+    "name": "...",
+    "location": { "lat": 22.300, "lng": 114.175 } <-- this
+  }
+*/
 class Restaurant {
   static async findAll() {
     const db = getDB();

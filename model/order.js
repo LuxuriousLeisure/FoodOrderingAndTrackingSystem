@@ -7,6 +7,10 @@ class Order {
     const result = await db.collection('orders').insertOne({
       ...orderData,
       status: 'pending',
+      driverId: null,
+      driverStatus: 'waiting',
+      userLocation: orderData.userLocation,
+      restaurantLocation: orderData.restaurantLocation,
       createdAt: new Date()
     });
     return result.insertedId;
@@ -31,6 +35,15 @@ class Order {
       { $set: { status, updatedAt: new Date() } }
     );
   }
+
+  static async updateDriverLocation(orderId, driverLocation){
+    const db = getDB();
+    await db.collection('orders').updateOne(
+      {_id: new ObjectId(orderId)},
+      {$set: {driverLocation, updatedAt: new Date()}}
+    );
+  }
+
 }
 
 module.exports = Order;
