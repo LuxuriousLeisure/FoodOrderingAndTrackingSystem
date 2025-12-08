@@ -4,7 +4,7 @@ const Order = require('../model/order');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Driver = require('../model/driver');
 const User = require('../model/user');
-const Restaurant = require('../model/restaurant');
+
 
 exports.addToCart = async (req, res) => {
   if (!req.session.user) {
@@ -217,4 +217,5 @@ exports.getFinish = (req, res) => {
   if (!req.session.user) return res.redirect('/login?as=user');
   res.render('finish', { user: req.session.user, role: req.session.user.role });
 };
+
 
