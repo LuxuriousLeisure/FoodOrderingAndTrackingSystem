@@ -16,6 +16,8 @@ const staffController = require('./controller/staffController');
 const app = express();
 const PORT = 8099;
 
+// Webhook endpoint for Stripe
+app.post('/webhook', express.raw({type: 'application/json'}), orderController.stripeWebhook);
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -54,8 +56,7 @@ app.get('/logout', authController.logout);
 app.get('/staff', staffController.getStaffConsole);
 app.post('/staff/order/:id/status', staffController.updateOrderStatus);
 
-// Webhook endpoint for Stripe
-app.post('/webhook', express.raw({type: 'application/json'}), orderController.stripeWebhook);
+
 
 // Start server
 async function start() {
