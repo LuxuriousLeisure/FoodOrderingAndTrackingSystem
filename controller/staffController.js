@@ -25,9 +25,30 @@ exports.updateOrderStatus = async (req, res) => {
   }
 
   try {
-    await Order.updateStatus(req.params.id, req.body.status);
+    const orderId = req.params.id;
+    const newStatus = req.body.status;
+    
+    // 1. 更新订单状态
+    await Order.updateStatus(orderId, newStatus);
+    
+    // 2. 核心分配逻辑：当状态变为 preparing 时触发分配司机
+    if (newStatus === 'pending') {
+        // 查找一个空闲的司机 (status: 'available')
+        const driver = await Driver.findOne({ status: 'available' }); 
+        
+        if (driver) {
+            // 分配订单给司机，并更新司机状态为 to_restaurant
+            await Driver.assignOrder(driver._id, orderId);
+            
+            // 更新订单中的 driverId 字段
+            await Order.updateDriver(orderId, driver._id);
+        }
+    }
+
     res.redirect('/staff');
   } catch (err) {
+    console.error("Error updating order status:", err);
     res.status(500).send('Error updating order');
   }
 };
+
