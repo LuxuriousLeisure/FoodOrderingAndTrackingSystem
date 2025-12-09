@@ -1,9 +1,9 @@
-
+const path = require('path');
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const path = require('path');
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { connectDB } = require('./model/db');
 
@@ -29,7 +29,7 @@ app.use(session({
   cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 app.set('view engine', 'ejs');
-
+//app.use(express.static(path.join(__dirname, 'public'))); // 让Express托管public目录下的静态文件
 // Make Stripe key available to views
 
 // Routes
