@@ -37,7 +37,7 @@
         <label>Email<input type="email" name="email" required></label>
         <label>Password<input type="password" name="password" required></label>
         <!-- 新增隐藏字段传递角色信息 -->
-        <input type="hidden" name="role" id="registerRole" value="user">
+        <input type="hidden" name="role" id="registerRole" value="<%=role%>">
         <button class="btn primary" type="submit">Create account</button>
       </form>
 
@@ -47,7 +47,7 @@
         <label>Email<input type="email" id="loginEmail" name="email" required></label>
         <label>Password<input type="password" id="loginPass" name="password" required></label>
         <!-- 新增隐藏字段传递角色，与注册保持一致 -->
-         <input type="hidden" name="role" id="loginRole" value="user">
+         <input type="hidden" name="role" id="loginRole" value="<%=role%>">
         <button class="btn primary" type="submit">Log in</button>
         <div class="muted" id="loginError" style="color:#b91c1c"></div>
       </form>
