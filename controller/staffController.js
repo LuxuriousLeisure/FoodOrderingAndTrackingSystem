@@ -1,6 +1,22 @@
 const Order = require('../model/order');
+const Driver = require('../model/driver');
 
 // 员工控制台
+// exports.getStaffConsole = async (req, res) => {
+//   if (!req.session.user || req.session.user.role !== 'staff') {
+//     return res.redirect('/login?as=staff');
+//   }
+
+//   try {
+//     const orders = await Order.findAll();
+//     res.render('staff', {
+//       user: req.session.user,
+//       orders
+//     });
+//   } catch (err) {
+//     res.status(500).send('Error loading staff console');
+//   }
+// };
 exports.getStaffConsole = async (req, res) => {
   if(!req.session.staff || req.session.staff.role !== 'staff'){
     console.log("i knew it")
@@ -19,6 +35,18 @@ exports.getStaffConsole = async (req, res) => {
 };
 
 // 更新订单状态
+// exports.updateOrderStatus = async (req, res) => {
+//   if (!req.session.user || req.session.user.role !== 'staff') {
+//     return res.redirect('/login?as=staff');
+//   }
+
+//   try {
+//     await Order.updateStatus(req.params.id, req.body.status);
+//     res.redirect('/staff');
+//   } catch (err) {
+//     res.status(500).send('Error updating order');
+//   }
+// };
 exports.updateOrderStatus = async (req, res) => {
   if (!req.session.user || req.session.user.role !== 'staff') {
     return res.redirect('/login?as=staff');
@@ -31,7 +59,7 @@ exports.updateOrderStatus = async (req, res) => {
     // 1. 更新订单状态
     await Order.updateStatus(orderId, newStatus);
     
-    // 2. 核心分配逻辑：当状态变为 preparing 时触发分配司机
+    // 2. ⭐ 核心分配逻辑：当状态变为 preparing 时触发分配司机
     if (newStatus === 'pending') {
         // 查找一个空闲的司机 (status: 'available')
         const driver = await Driver.findOne({ status: 'available' }); 
@@ -51,4 +79,3 @@ exports.updateOrderStatus = async (req, res) => {
     res.status(500).send('Error updating order');
   }
 };
-
