@@ -11,6 +11,7 @@ class Order {
       driverStatus: 'waiting',
       userLocation: orderData.userLocation,
       restaurantLocation: orderData.restaurantLocation,
+      // stripeSessionId: session.id,
       createdAt: new Date()
     });
     return result.insertedId;
@@ -23,9 +24,22 @@ class Order {
     }).sort({ createdAt: -1 }).toArray();
   }
 
+  static async findById(orderId) {
+    const db = getDB();
+    return await db.collection('orders').findOne({ 
+      _id: new ObjectId(orderId) // 把订单ID转成MongoDB的ObjectId格式
+    });
+  }
+
   static async findAll() {
     const db = getDB();
     return await db.collection('orders').find().sort({ createdAt: -1 }).toArray();
+  }
+
+  // 新增：通过Stripe会话ID查询订单
+  static async findOne(query) {
+    const db = getDB();
+    return await db.collection('orders').findOne(query);
   }
 
   static async updateStatus(orderId, status) {
@@ -33,6 +47,15 @@ class Order {
     await db.collection('orders').updateOne(
       { _id: new ObjectId(orderId) },
       { $set: { status, updatedAt: new Date() } }
+    );
+  }
+
+  static async updateDriver(orderId, driverId) {
+    const db = getDB();
+    await db.collection('orders').updateOne(
+      { _id: new ObjectId(orderId) },
+      // 确保将 driverId 存储为 ObjectId
+      { $set: { driverId: new ObjectId(driverId), driverStatus: 'assigned' } } 
     );
   }
 
