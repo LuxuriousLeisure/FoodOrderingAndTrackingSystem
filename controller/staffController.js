@@ -2,14 +2,15 @@ const Order = require('../model/order');
 
 // 员工控制台
 exports.getStaffConsole = async (req, res) => {
-  if (!req.session.user || req.session.user.role !== 'staff') {
+  if(!req.session.staff || req.session.staff.role !== 'staff'){
+    console.log("i knew it")
     return res.redirect('/login?as=staff');
   }
 
   try {
     const orders = await Order.findAll();
     res.render('staff', {
-      user: req.session.user,
+      staff: req.session.staff,
       orders
     });
   } catch (err) {
