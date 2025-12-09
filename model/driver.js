@@ -1,19 +1,30 @@
-const { getDB } = require('./db');
 const { ObjectId } = require('mongodb');
-
+const { getDB } = require('./db');
 class Driver {
   static async create(driver) {
-    const db = getDB();
-    const result = await db.collection('drivers').insertOne({
-      ...driver,
-      status: 'idle',
-      currentLocation: driver.currentLocation || null,
-      assignedOrderId: null,
-      createdAt: new Date()
-    });
-    return result.insertedId;
+  
+	  
+	    const db = getDB();
+	    const result = await db.collection('drivers').insertOne({
+	      name: driver.name,
+	      email: driver.email,
+	      password: driver.password,
+	      role: driver.role || 'staff',
+	      status: 'idle',
+	      currentLocation: driver.currentLocation || null,
+	      assignedOrderId: null,
+	      createdAt: new Date()
+	    });
+	    return result.insertedId;
+    
+
   }
 
+  static async findByEmail(email) {
+    const db = getDB();
+    return await db.collection('drivers').findOne({ email });
+  }
+  
   static async findById(id) {
     const db = getDB();
     return await db.collection('drivers').findOne({ _id: new ObjectId(id) });
