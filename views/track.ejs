@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Tracking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
+    <style>
+        #map { width: 100%; height: 380px; border-radius: 12px; }
+    </style>
+</head>
+
+<body>
+
+<header></header>
+
+<div class="wrap">
+
+    <h1 class="ink">Track Your Order</h1>
+    <p class="muted">Your driver is on the way! Live location and progress are shown below.</p>
+
+    <div class="layout">
+        <div class="card">
+
+            <h2 class="ink">Live Map</h2>
+            <div id="map"></div>
+
+            <!-- ETA BOX -->
+            <div class="card" style="margin-top:16px;">
+                <h3 class="ink">Estimated Arrival Time</h3>
+                <p id="eta" class="ink" style="font-size:1.2rem;font-weight:700;">-- mins</p>
+            </div>
+
+            <!-- STATUS PROGRESS BAR -->
+            <div class="card" style="margin-top:16px;">
+                <h3 class="ink">Order Status</h3>
+
+                <div style="background:#f0f0f0;width:100%;height:18px;border-radius:12px;overflow:hidden;">
+                    <div id="status-bar" style="height:100%;width:0%;background:var(--brand);transition:width .4s;"></div>
+                </div>
+
+                <p id="status-text" class="ink" style="margin-top:8px;">Waiting for driver to accept order (0%)</p>
+
+                <div style="margin-top:12px;">
+                    <button class="btn primary" id="driver-update-btn">Driver: Update Status</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE: ORDER SUMMARY -->
+        <div class="cart">
+            <h2 class="ink">Order Summary</h2>
+
+            <ul id="orderItems">
+                <li><span>Burger Combo</span><strong class="price">$48</strong></li>
+            </ul>
+
+            <div class="total">
+                <span>Total</span>
+                <strong class="price">$48</strong>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer class="wrap">
+    <p>&copy; 2025 FoodExpress</p>
+</footer>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Leaflet Routing Machine -->
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+<script>
+/* ------------------------------------------------------
+   MAP INITIALIZE
+------------------------------------------------------ */
+const map = L.map('map').setView([22.300, 114.175], 14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+}).addTo(map);
+
+/* STATIC DEMO COORDINATES */
+let restaurant = [<%= restaurant.lat %>, <%= restaurant.lng %>];//[22.300, 114.175];
+let user       = [<%= userLoc.lat %>, <%= userLoc.lng %>];//[22.285, 114.158];
+let driver     = [<%= driver.lat %>, <%= driver.lng %>]//[22.305, 114.169];
+
+/* STATUS CONTROL — changes route logic */
+let status = "to_restaurant";  
+// Possible: "assigned", "to_restaurant", "picked_up", "to_user", "delivered"
+
+/* MARKERS */
+L.marker(restaurant).addTo(map).bindPopup("Restaurant");
+L.marker(user).addTo(map).bindPopup("User");
+let driverMarker = L.marker(driver).addTo(map).bindPopup("Driver");
+
+/* Visible route */
+let routeControl = L.Routing.control({
+    waypoints: [],
+    addWaypoints: false,
+    draggableWaypoints: false,
+    createMarker: () => null,
+    lineOptions: { styles: [{ color: "#0078ff", weight: 4 }] }
+}).addTo(map);
+
+/* Lightweight extra router (for multi-leg ETA) */
+const router = L.Routing.osrmv1();
+
+/* ------------------------------------------------------
+   UPDATE ROUTE & ETA BASED ON STATUS
+------------------------------------------------------ */
+function updateRouteAndEta() {
+    if (status === "assigned" || status === "to_restaurant") {
+
+        // FIRST LEG: driver → restaurant
+        routeControl.setWaypoints([
+            L.latLng(driver[0], driver[1]),
+            L.latLng(restaurant[0], restaurant[1])
+        ]);
+
+        // When main leg finishes calculating
+        routeControl.on('routesfound', function (e) {
+            const firstLegSecs = e.routes[0].summary.totalTime;
+
+            // SECOND LEG: restaurant → user
+            router.route([
+                L.Routing.waypoint(L.latLng(restaurant)),
+                L.Routing.waypoint(L.latLng(user))
+            ], (err, routes) => {
+                if (err || !routes) return;
+
+                const secondLegSecs = routes[0].summary.totalTime;
+                const totalMins = Math.round((firstLegSecs + secondLegSecs) / 60);
+
+                document.getElementById("eta").textContent = `${totalMins} mins`;
+            });
+        });
+
+    } else if (status === "picked_up" || status === "to_user") {
+
+        // ROUTE: driver → user only
+        routeControl.setWaypoints([
+            L.latLng(driver),
+            L.latLng(user)
+        ]);
+
+        // ETA = single-leg time
+        routeControl.on('routesfound', function (e) {
+            const seconds = e.routes[0].summary.totalTime;
+            const minutes = Math.round(seconds / 60);
+            document.getElementById("eta").textContent = `${minutes} mins`;
+        });
+    }
+
+    if (status === "delivered") {
+        document.getElementById("eta").textContent = "Delivered!";
+    }
+}
+
+/* ------------------------------------------------------
+   SIMULATED DRIVER MOVEMENT (DEMO)
+------------------------------------------------------ */
+setInterval(() => {
+    // Random movement (demo only)
+    driver = [
+        driver[0] + (Math.random() * 0.002 - 0.001),
+        driver[1] + (Math.random() * 0.002 - 0.001)
+    ];
+
+    driverMarker.setLatLng(driver);
+
+    updateRouteAndEta();
+}, 5000);
+
+/* ------------------------------------------------------
+   STATUS BUTTON (demo)
+------------------------------------------------------ */
+document.getElementById("driver-update-btn").onclick = () => {
+
+    if (status === "to_restaurant") {
+        status = "picked_up";
+        document.getElementById("status-bar").style.width = "50%";
+        document.getElementById("status-text").innerText =
+            "Driver has picked up your food";
+    }
+    else if (status === "picked_up") {
+        status = "to_user";
+        document.getElementById("status-bar").style.width = "75%";
+        document.getElementById("status-text").innerText =
+            "Driver is heading to you";
+    }
+    else if (status === "to_user") {
+        status = "delivered";
+        document.getElementById("status-bar").style.width = "100%";
+        document.getElementById("status-text").innerText =
+            "Order Delivered";
+    }
+
+    updateRouteAndEta();
+};
+</script>
+
+</body>
+</html>
+
