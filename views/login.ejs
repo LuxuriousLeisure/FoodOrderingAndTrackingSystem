@@ -164,10 +164,33 @@ document.addEventListener('DOMContentLoaded', () => {
        body: new URLSearchParams(data)
       });
       
-      if (response.ok) {
-        // 注册成功后跳转（后端会处理session并 redirect）
-        window.location.href = await response.url;
-      } else {
+      if (response.ok || response.redirected) {
+  // Run geolocation first (if you want)
+		conosle.log("response ok");
+		  try {
+			const position = await new Promise((resolve, reject) => {
+			  navigator.geolocation.getCurrentPosition(resolve, reject, {
+				enableHighAccuracy: true,
+				maximumAge: 0
+			  });
+			});
+
+			await fetch('/api/sendGeo', {
+			  method: 'PUT',
+			  headers: { 'Content-Type': 'application/json' },
+			  body: JSON.stringify({
+				email: data.email,  // from registration form
+				lat: position.coords.latitude,
+				lon: position.coords.longitude
+			  })
+			});
+		  } catch (err) {
+			console.warn('Location skipped:', err.message);
+		  }
+
+  // Now ALWAYS go to home – don't trust response.url
+		window.location.href = '/';
+} else {
         // 显示后端返回的错误信息
         const error = await response.text();
         throw new Error(error || 'Registration failed');
@@ -233,7 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, lat, lon })
         })
-
+		.then(res=>res.json())
+		.then(data=>console.log(data.message))
 
         console.log('Location sent successfully');
       } catch (geoErr) {

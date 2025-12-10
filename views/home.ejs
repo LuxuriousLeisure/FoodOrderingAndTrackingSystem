@@ -18,7 +18,7 @@
           <% if (user) { %>Logged in as <%= user.name %> (<%= user.role %>)<% } else { %>Not logged in<% } %>
         </span>
         <% if (user) { %>
-          <a class="pill" href="/logout">Logout</a>
+          <a class="pill" id="logout-btn" href="#">Logout</a>
         <% } else { %>
           <a class="pill" href="/login?as=user">User</a>
           <a class="pill" href="/login?as=staff">Staff</a>
@@ -85,7 +85,17 @@
   </main>
 
   <script>
-    // 轮播图逻辑
+    // 轮播图逻辑'
+	const logout=document.getElementById("logout-btn");
+	logout.addEventListener{
+	
+	
+	
+	
+	}
+	
+	
+	
  const track = document.getElementById('carouselTrack');
     const slides = track.children;
     const dotsWrap = document.getElementById('carouselDots');
@@ -159,6 +169,10 @@
       ctx.font = 'bold 24px Arial';
       ctx.fillText(canvas.dataset.name, 20, 40);
     });
+	
+
+
+
   </script>
 </body>
 </html>
