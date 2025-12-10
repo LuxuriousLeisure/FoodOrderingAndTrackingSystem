@@ -6,18 +6,18 @@
   "scripts": {
     "login": "./stripe_1.32.0_linux_x86_64/stripe login",
     "webhook": "./stripe_1.32.0_linux_x86_64/stripe listen --forward-to localhost:8099/webhook",
-    "start": "node app.js"
-    
-    
+    "start": "node app.js",
+	"dev": "nodemon app.js"
   },
   "dependencies": {
     "body-parser": "^1.20.1",
     "dotenv": "^16.6.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "mongodb": "^6.3.0",
     "express-session": "^1.17.3",
+    "mongodb": "^6.3.0",
     "mongoose": "^7.0.0",
+    "nodemon": "^3.1.11",
     "stripe": "^14.21.0"
   }
 }

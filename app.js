@@ -1,8 +1,11 @@
+const https=require("https");
+const fs=require('fs');
 const path = require('path');
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { connectDB } = require('./model/db');
@@ -61,11 +64,25 @@ app.post('/staff/order/:id/status', staffController.updateOrderStatus);
 // Start server
 async function start() {
   await connectDB();
+  
+  const options = {
+    key: fs.readFileSync('cert.key'),
+    cert: fs.readFileSync('cert.crt')
+  };
+  https.createServer(options, app).listen(PORT, () => {
+    console.log(` running on https://localhost:${PORT}`);
+	console.log(`Stripe Webhook Testing: stripe listen --forward-to localhost:${PORT}/webhook`);
+  });
+}
+
+/* else {
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
     console.log(`Stripe Webhook Testing: stripe listen --forward-to localhost:${PORT}/webhook`);
   });
 }
+
+}*/
 
 start();
 
