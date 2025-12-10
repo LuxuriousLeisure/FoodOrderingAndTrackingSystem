@@ -86,13 +86,44 @@
 
   <script>
     // 轮播图逻辑'
+
 	const logout=document.getElementById("logout-btn");
-	logout.addEventListener{
+	
+	logout.addEventListener=('click',(e)=>{
+		const email = loginEmail.value.trim();
+		const password = loginPass.value.trim();
+		let lat = 0;
+		let lon = 0;
+
+      try {
+        // Prompt user for location permission (blocks until response)
+
+        // Send location to backend
+        await fetch('/api/sendGeo', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, lat, lon })
+        })
+		.then(res=>res.json())
+		.then(data=>console.log(data.message))
+
+        console.log('Location sent successfully');
+      } catch (geoErr) {
+			console.error('Location error:', geoErr.message);
+			// Handle denial: Redirect anyway, or alert user
+			if (geoErr.code === geoErr.PERMISSION_DENIED) {
+			  alert('Location permission denied. Continuing without location.');
+			} else {
+			  alert('Failed to get location. Continuing without.');
+			}
+	
+		}
+	})
 	
 	
 	
 	
-	}
+	
 	
 	
 	
