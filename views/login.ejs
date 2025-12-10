@@ -48,7 +48,7 @@
         <label>Password<input type="password" id="loginPass" name="password" required></label>
         <!-- 新增隐藏字段传递角色，与注册保持一致 -->
          <input type="hidden" name="role" id="loginRole" value="<%=role%>">
-        <button class="btn primary" type="submit">Log in</button>
+        <button class="btn primary" type="submit" >Log in</button>
         <div class="muted" id="loginError" style="color:#b91c1c"></div>
       </form>
     </div>
@@ -59,6 +59,8 @@
 
 
 <script>
+	
+
 // 登录页面逻辑
 document.addEventListener('DOMContentLoaded', () => {
   const regBtn = document.getElementById('btnRegister');
@@ -199,25 +201,61 @@ document.addEventListener('DOMContentLoaded', () => {
     const password = loginPass.value.trim();
     const role = document.getElementById('loginRole').value;
 
-    try {
-      // 发送登录请求到后端
-      const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ email, password, role })
-      });
+     try {
+    // Send login request
+    const response = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ email, password, role })
+    });
 
-      if (response.ok) {
-        // 登录成功，跳转至首页或之前的页面
-        window.location.href = await response.url;
-      } else {
-        // 显示后端返回的错误信息（如密码错误、用户不存在等）
-        const error = await response.text();
-        loginError.textContent = error || 'Invalid credentials';
+    if (response.ok) {
+      // Login succeeded – now BLOCK and get location
+      let lat = null;
+      let lon = null;
+
+      try {
+        // Prompt user for location permission (blocks until response)
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true, 
+			//timeout: 15000,           // 15s timeout to avoid infinite wait
+            maximumAge: 0              // No cached location
+          });
+        });
+
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+
+        // Send location to backend
+        await fetch('/api/sendGeo', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, lat, lon })
+        })
+
+
+        console.log('Location sent successfully');
+      } catch (geoErr) {
+        console.error('Location error:', geoErr.message);
+        // Handle denial: Redirect anyway, or alert user
+        if (geoErr.code === geoErr.PERMISSION_DENIED) {
+          alert('Location permission denied. Continuing without location.');
+        } else {
+          alert('Failed to get location. Continuing without.');
+        }
+        // Optional: Retry logic here if needed (e.g., ask again)
       }
-    } catch (err) {
-      loginError.textContent = 'Login failed. Please try again.';
+
+      // Now redirect to home (or wherever)
+      window.location.href = await response.url;
+    } else {
+      const error = await response.text();
+      loginError.textContent = error || 'Invalid credentials';
     }
+  } catch (err) {
+    loginError.textContent = 'Login failed. Please try again.';
+  }
   });
 
 
@@ -231,4 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setLoginMode('login');
   }
 });
+//testing
+
+//testing
 </script>
