@@ -1,9 +1,13 @@
 # FoodOrderingAndTrackingSystem
 Description
-This is a full-stack web application for ordering food from restaurants and tracking orders in real-time. It follows an MVC (Model-View-Controller) architecture, using MongoDB as the database. Users can browse restaurants, add items to their cart, checkout using Stripe for payments, track their orders, and leave comments. It includes user authentication and a staff console for managing order statuses.
+This is a full-stack web application for ordering food from restaurants and tracking orders in real-time. 
+It follows an MVC (Model-View-Controller) architecture, using MongoDB as the database. 
+Users can browse restaurants, add items to their cart, checkout using Stripe for payments, track their orders, and leave comments. 
+It includes user authentication and a staff console for managing order statuses.
 The system supports secure payments, session-based authentication, and webhook integration for handling payment events.
-Features
 
+
+Features
 Restaurant Browsing: View a list of restaurants and detailed views of individual restaurants.
 Cart Management: Add items to cart, update quantities, and proceed to checkout.
 Payment Integration: Secure checkout using Stripe, with success and cancel handling.
@@ -23,15 +27,10 @@ Other: Body-parser for request handling, Express-session for sessions, Dotenv fo
 Static Assets: Served from /public directory (e.g., CSS files)
 
 Installation
-
-Clone the Repository:textgit clone https://github.com/LuxuriousLeisure/FoodOrderingAndTrackingSystem.git
-cd FoodOrderingAndTrackingSystem
-Install Dependencies:textnpm install
-Set Up Environment Variables:
-Create a .env file in the root directory with the following variables:textMONGO_URI=mongodb://localhost:27017/food_ordering_db  # Replace with your MongoDB connection string
-STRIPE_SECRET_KEY=sk_test_...  # Your Stripe secret key
-STRIPE_WEBHOOK_SECRET=whsec_...  # Your Stripe webhook secret (if using webhooks)
-Start the Server:textnpm startThe server will run on http://localhost:8099.
+git clone https://github.com/LuxuriousLeisure/FoodOrderingAndTrackingSystem
+npm install
+npm start
+The server will run on http://localhost:8099.
 
 Usage
 
@@ -65,11 +64,8 @@ public/: Static files like CSS.
 package.json: Project dependencies and scripts.
 
 
-HOW TO RUN : 
 
-git clone https://github.com/LuxuriousLeisure/FoodOrderingAndTrackingSystem
-npm install
-npm start
-The server will run on http://localhost:8099.
+
+
 
 
