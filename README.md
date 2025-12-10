@@ -1,71 +1,51 @@
 # FoodOrderingAndTrackingSystem
-1.Description
---This is a full-stack web application for ordering food from restaurants and tracking orders in real-time. 
---It follows an MVC (Model-View-Controller) architecture, using MongoDB as the database. 
---Users can browse restaurants, add items to their cart, checkout using Stripe for payments, track their orders, and leave comments. 
---It includes user authentication and a staff console for managing order statuses.
---The system supports secure payments, session-based authentication, and webhook integration for handling payment events.
+Github repository: https://github.com/LuxuriousLeisure/FoodOrderingAndTrackingSystem
 
+## 📝 Project Description
+This is a full-stack web application for ordering food from restaurants and tracking orders in real-time.
+- Follows an **MVC (Model-View-Controller)** architecture for clean code separation
+- Uses **MongoDB** as the primary database for data persistence
+- Supports core user workflows: restaurant browsing, cart management, secure payment, and real-time order tracking
+- Includes user authentication and a dedicated staff console for order management
+- Integrates Stripe webhooks to handle payment events and ensure transaction reliability
 
-2.Features
---Restaurant Browsing: View a list of restaurants and detailed views of individual restaurants.
---Cart Management: Add items to cart, update quantities, and proceed to checkout.
---Payment Integration: Secure checkout using Stripe, with success and cancel handling.
---Order Tracking: Real-time tracking of order status.
---User Authentication: Register, login, logout, and session management.
---Comments and Ratings: Add comments to restaurants; view rating and finish pages.
---Staff Console: Staff can view orders and update their statuses.
---Webhook Support: Handles Stripe events for payment confirmation.
+## ✨ Key Features
+| Category          | Details                                                                 |
+|-------------------|-------------------------------------------------------------------------|
+| Restaurant Browsing | View restaurant list and detailed pages for individual restaurants     |
+| Cart Management    | Add items to cart, update quantities, and proceed to checkout           |
+| Payment Integration | Secure checkout via Stripe (with success/cancel payment handling)       |
+| Order Tracking     | Real-time monitoring of order status (pending/preparing/delivering)    |
+| User Authentication | Register, login, logout, and session-based user state management        |
+| Comments & Ratings | Add comments to restaurants; view rating summaries and order finish pages |
+| Staff Console      | Staff-only interface to view all orders and update order statuses       |
+| Webhook Support    | Automatically handle Stripe payment confirmation events                |
 
-3.Technologies Used
+## 🛠️ Technologies Used
+### Backend
+- Node.js (JavaScript runtime environment)
+- Express.js (lightweight web framework for Node.js)
+- MongoDB with Mongoose ORM (database and object modeling)
 
---Backend: Node.js, Express.js
---Database: MongoDB with Mongoose ORM
---Frontend: EJS templating engine
---Payments: Stripe API
---Other: Body-parser for request handling, Express-session for sessions, Dotenv for environment variables
---Static Assets: Served from /public directory (e.g., CSS files)
+### Frontend
+- EJS (Embedded JavaScript templating engine for dynamic HTML rendering)
+- CSS (custom styles for responsive UI, served from static assets folder)
 
-4.Installation
---git clone https://github.com/LuxuriousLeisure/FoodOrderingAndTrackingSystem
---npm install
---npm start
---The server will run on http://localhost:8099.
+### Core Dependencies
+- body-parser: Parse incoming request bodies (form data/JSON)
+- express-session: Session management for user authentication
+- dotenv: Load environment variables from `.env` file
+- Stripe API: Secure payment processing and webhook integration
 
-5.Usage
+## 🚀 Installation & Setup
+### Prerequisites
+- Node.js (v14+ recommended)
+- MongoDB (local instance or MongoDB Atlas cloud service)
+- Stripe account (for API keys and webhook testing)
+- Git (for cloning the repository)
 
---User Flow:
---Visit / to browse restaurants.
---Register or login at /login.
---Add items to cart via /cart/add.
---Proceed to /checkout and pay using Stripe.
---Track orders at /tracking/:orderId.
-
---Staff Flow:
---Access /staff (assuming authentication/authorization is implemented for staff).
---Update order statuses via /staff/order/:id/status.
-
---Stripe Webhook Testing:
---Use the provided script:textnpm run webhookThis forwards Stripe events to localhost:8099/webhook.
-
-6.Configuration
-
-Database: Ensure MongoDB is running and the connection URI is correctly set in .env.
-Stripe: Obtain API keys from the Stripe dashboard and add to .env.
-Port: The app listens on port 8099 by default (hardcoded in app.js).
-
-Directory Structure
-
-app.js: Main application file with server setup, middleware, and routes.
-controller/: Contains controllers for auth, restaurants, orders, and staff.
-model/: Database models (e.g., User, Restaurant, Order).
-views/: EJS templates for rendering pages.
-public/: Static files like CSS.
-package.json: Project dependencies and scripts.
-
-
-
-
-
-
-
+### Step-by-Step Installation
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/LuxuriousLeisure/FoodOrderingAndTrackingSystem.git
+   cd FoodOrderingAndTrackingSystem
