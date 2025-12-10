@@ -44,8 +44,3 @@ This is a full-stack web application for ordering food from restaurants and trac
 - Stripe account (for API keys and webhook testing)
 - Git (for cloning the repository)
 
-### Step-by-Step Installation
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/LuxuriousLeisure/FoodOrderingAndTrackingSystem.git
-   cd FoodOrderingAndTrackingSystem
