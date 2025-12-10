@@ -172,7 +172,7 @@ exports.getLocation = async (req, res) => {
     }
 
     const updated = await User.updateLocation(email, lat, lon);
-    
+    console.log('Update result:', updated ? 'Modified' : 'No change/user not found', { email, lat, lon });
     if (updated) {
       res.json({ success: true, message: 'Location updated' });
     } else {
