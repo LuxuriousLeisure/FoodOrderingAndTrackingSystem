@@ -13,12 +13,10 @@ This is a full-stack web application for ordering food from restaurants and trac
 | Category          | Details                                                                 |
 |-------------------|-------------------------------------------------------------------------|
 | Restaurant Browsing | View restaurant list and detailed pages for individual restaurants     |
-| Cart Management    | Add items to cart, update quantities, and proceed to checkout           |
 | Payment Integration | Secure checkout via Stripe (with success/cancel payment handling)       |
 | Order Tracking     | Real-time monitoring of order status (pending/preparing/delivering)    |
 | User Authentication | Register, login, logout, and session-based user state management        |
 | Comments & Ratings | Add comments to restaurants; view rating summaries and order finish pages |
-| Staff Console      | Staff-only interface to view all orders and update order statuses       |
 | Webhook Support    | Automatically handle Stripe payment confirmation events                |
 
 ## 🛠️ Technologies Used
