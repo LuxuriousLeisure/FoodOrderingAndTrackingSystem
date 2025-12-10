@@ -62,6 +62,9 @@
 
 const User = require('../model/user');
 const Driver = require('../model/driver');
+
+
+
 // 显示登录页
 exports.getLogin = (req, res) => {
   res.render('login', { 
@@ -160,6 +163,26 @@ exports.postRegister = async (req, res) => {
   }
 };
 
+exports.getLocation = async (req, res) => {
+  try {
+    const { email, lat, lon } = req.body;  // Access from body (JSON)
+    
+    if (!email || !lat || !lon) {
+      return res.status(400).json({ success: false, message: 'Missing data' });
+    }
+
+    const updated = await User.updateLocation(email, lat, lon);
+    
+    if (updated) {
+      res.json({ success: true, message: 'Location updated' });
+    } else {
+      res.status(404).json({ success: false, message: 'User not found or no update' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
 exports.set
 
 // 登出
