@@ -43,16 +43,22 @@ This is a full-stack web application for ordering food from restaurants and trac
 - Git (for cloning the repository)
 
 ## 🚀 How to Start
-- Two terminals are required.
+- ### Configuration Stripe CLI
+  ```bash
+  curl -sS https://stripe.com/install.sh | bash
+  stripe login
+  ```
+- ### Two terminals are required.
 
-### 1️⃣ Stripe Webhook Listener
+#### 1️⃣ Stripe Webhook Listener
 ```bash
 cd FoodOrderingAndTrackingSystem-main/
 cd stripe_1.32.0_linux_x86_64/
 chmod +x stripe
 ./stripe listen --forward-to localhost:8099/webhook
 ```
-### 2️⃣ Start program
+  - Put STRIPE_WEBHOOK_SECRET to .env
+#### 2️⃣ Start program
 ```bash
 cd FoodOrderingAndTrackingSystem-main/
 npm install
