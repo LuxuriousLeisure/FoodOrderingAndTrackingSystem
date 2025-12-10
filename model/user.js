@@ -17,6 +17,16 @@ class User {
     const db = getDB();
     return await db.collection('users').findOne({ _id: new ObjectId(id) });
   }
+  
+  static async updateLocation(email,lati,longi){
+	  const db=getDB();
+	   const result= await db.collection('users').updateOne(
+			{ email: email },                    
+			{ $set: { lati: lati, longi: longi } } 
+		);
+		return result.modifiedCount > 0;
+	  
+  }
 }
 
 module.exports = User;
