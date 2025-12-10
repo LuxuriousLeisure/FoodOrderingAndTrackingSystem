@@ -59,6 +59,7 @@ app.get('/logout', authController.logout);
 app.get('/staff', staffController.getStaffConsole);
 app.post('/staff/order/:id/status', staffController.updateOrderStatus);
 
+app.put('/api/sendGeo',authController.getLocation);
 
 
 // Start server
